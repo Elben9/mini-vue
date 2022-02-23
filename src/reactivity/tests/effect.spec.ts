@@ -64,7 +64,7 @@ describe('effect', () => {
     expect(dummy).toBe(2)
   })
 
-  it('stop', () => {
+  it.only('stop', () => {
     let dummy
     const obj = reactive({ prop: 1 })
     const runner = effect(() => {
@@ -73,7 +73,10 @@ describe('effect', () => {
     obj.prop = 2
     expect(dummy).toBe(2)
     stop(runner)
-    obj.prop = 3
+    // obj.prop = 3
+    // pbj.prop = obj.prop + 1
+    obj.prop++
+
     expect(dummy).toBe(2)
 
     // stopped effect should still be manually callable
