@@ -33,6 +33,7 @@ function trackRefValue (ref) {
   }
 }
 
+// 转换
 function convert (value) {
   return isObject(value) ? reactive(value) : value
 }

@@ -4,7 +4,7 @@ import { extend } from "../util"
 let activeEffect
 // 是否进行依赖收集
 let shouldTrack = false
-class ReactiveEffect {
+export class ReactiveEffect {
   private _fn: any
   public scheduler: Function | undefined
   onStop?: () => void
