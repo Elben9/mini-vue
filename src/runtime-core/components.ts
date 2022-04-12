@@ -15,7 +15,7 @@ export function setupComponent (instance) {
   // initSLots()
 
   // 初始化component
-  setupStatefulComponent (instance)
+  setupStatefulComponent(instance)
 }
 
 function setupStatefulComponent (instance: any) {

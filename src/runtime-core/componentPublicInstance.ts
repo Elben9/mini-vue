@@ -1,11 +1,11 @@
 const publicPropertiesMap = {
-  $el: instance => instance.vnode.el
+  $el: (instance) => instance.vnode.el,
 }
 export const PublicInstanceProxyHandlers = {
-  get ({_: instance}, key) {
+  get({ _: instance }, key) {
     // 从setupState获取值
     const { setupState } = instance
-    if (key in setupState) { 
+    if (key in setupState) {
       return setupState[key]
     }
     // if (key === '$el') {
@@ -15,5 +15,5 @@ export const PublicInstanceProxyHandlers = {
     if (publicGeeter) {
       return publicGeeter(instance)
     }
-  }
+  },
 }

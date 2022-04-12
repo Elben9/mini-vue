@@ -57,11 +57,11 @@ function mountElement (vnode: any, container: any) {
   container.append(el)
 }
 
-// 创建component
-function mounteComponent (vnode: any, container: any) {
-  const instance = createComponentInstance(vnode)
+// 创建component  initinalVNode初始化vnode
+function mounteComponent (initinalVNode: any, container: any) {
+  const instance = createComponentInstance(initinalVNode)
   setupComponent(instance)
-  SetupRenderEffectFn(instance, vnode, container)
+  SetupRenderEffectFn(instance, initinalVNode, container)
 }
 
 function mountChildren (vnode, container) {
@@ -70,7 +70,7 @@ function mountChildren (vnode, container) {
   })
 }
 
-function SetupRenderEffectFn (instance: any, vnode, container) {  
+function SetupRenderEffectFn (instance: any, initinalVNode, container) {  
   const { proxy } = instance
   
   // vnode
@@ -83,5 +83,5 @@ function SetupRenderEffectFn (instance: any, vnode, container) {
   patch(subTree, container)
   
   // 此时mount完
-  vnode.el = subTree.el
+  initinalVNode.el = subTree.el
 }
