@@ -1,0 +1,104 @@
+'use strict';
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+function createComponentInstance(vnode) {
+    var component = {
+        vnode: vnode,
+        type: vnode.type
+    };
+    return component;
+}
+function setupComponent(instance) {
+    // TODO
+    // initProps()
+    // initSLots()
+    // 初始化component
+    setupStatefulComponent(instance);
+}
+function setupStatefulComponent(instance) {
+    // 获取用户给到的配置 就是传入的type 实际为App
+    var Component = instance.type;
+    // 拿到setup
+    var setup = Component.setup;
+    if (setup) {
+        // 如果有setup 执行，可能返回function object
+        // 如果是function 认为返回的是render函数
+        // 如果是object 放在实例上
+        var setupResult = setup();
+        handleSetupResult(instance, setupResult);
+    }
+}
+function handleSetupResult(instance, setupResult) {
+    // TODO function
+    if (typeof setupResult === 'object') {
+        instance.setupState = setupResult;
+    }
+    finishComponentSetup(instance);
+}
+function finishComponentSetup(instance) {
+    var Component = instance.type;
+    // if (Component.render) {
+    instance.render = Component.render;
+    // } 
+}
+
+function render(vnode, container) {
+    // patch
+    patch(vnode);
+}
+function patch(vnode, container) {
+    // console.log(123) 
+    console.log(vnode.type, '查看element类型');
+    // 处理组件
+    // TODO 判断vnode是否element类型?
+    // 如何区分是element类型还是component类型
+    // processElement()
+    processComponent(vnode);
+}
+function processComponent(vnode, container) {
+    mounteComponent(vnode);
+}
+function mounteComponent(vnode, container) {
+    var instance = createComponentInstance(vnode);
+    setupComponent(instance);
+    SetupRenderEffectFn(instance);
+}
+function SetupRenderEffectFn(instance, container) {
+    // vnode
+    var subTree = instance.render();
+    // vnode -> patch
+    // vnode -> 现在上element类型 -> mountElement 挂载element
+    // mountElement 在patch里做
+    patch(subTree);
+}
+
+function createVNode(type, props, children) {
+    var vnode = {
+        type: type,
+        props: props,
+        children: children
+    };
+    return vnode;
+}
+
+// 接收根组件 返回对象
+function createApp(rootComponent) {
+    return {
+        // 接收一个element实例 根容器
+        mount: function (rootContainer) {
+            // 先转换成vnode 虚拟节点
+            // components => vnode
+            // 所有操作都基于vnode
+            var vnode = createVNode(rootComponent);
+            render(vnode);
+        }
+    };
+}
+
+function h(type, props, children) {
+    return createVNode(type, props, children);
+}
+
+exports.createApp = createApp;
+exports.h = h;

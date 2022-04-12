@@ -1,18 +1,23 @@
 {
   "name": "learn-mini-vie",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "lib/mini-vue.cjs.js",
+  "module": "lib/mini-vue.esm.js",
   "license": "MIT",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "build": "rollup -c rollup.config.js"
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",
     "@babel/preset-env": "^7.16.4",
     "@babel/preset-typescript": "^7.16.0",
+    "@rollup/plugin-typescript": "^8.3.1",
     "@types/jest": "^27.0.3",
     "babel-jest": "^27.4.4",
     "jest": "^27.4.4",
+    "rollup": "^2.70.1",
+    "tslib": "^2.3.1",
     "typescript": "^4.5.3"
   }
 }
