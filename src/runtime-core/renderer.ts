@@ -32,7 +32,7 @@ function processComponent (vnode: any, container: any) {
 
 // 创建element
 function mountElement (vnode: any, container: any) {
-  const el = document.createElement(vnode.type)
+  const el = (vnode.el = document.createElement(vnode.type))
   const { children, props } = vnode
   // children: string array
   if (typeof children === 'string') {
@@ -61,20 +61,27 @@ function mountElement (vnode: any, container: any) {
 function mounteComponent (vnode: any, container: any) {
   const instance = createComponentInstance(vnode)
   setupComponent(instance)
-  SetupRenderEffectFn(instance, container)
-}
-
-function SetupRenderEffectFn (instance: any, container) {   
-  // vnode
-  const subTree = instance.render()
-  // vnode -> patch
-  // vnode -> 现在上element类型 -> mountElement 挂载element
-  // mountElement 在patch里做
-  patch(subTree, container)
+  SetupRenderEffectFn(instance, vnode, container)
 }
 
 function mountChildren (vnode, container) {
   vnode.children.forEach(v => {
     patch(v, container)
   })
+}
+
+function SetupRenderEffectFn (instance: any, vnode, container) {  
+  const { proxy } = instance
+  
+  // vnode
+  // const subTree = instance.render()
+  const subTree = instance.render.call(proxy)
+
+  // vnode -> patch
+  // vnode -> 现在上element类型 -> mountElement 挂载element
+  // mountElement 在patch里做
+  patch(subTree, container)
+  
+  // 此时mount完
+  vnode.el = subTree.el
 }
