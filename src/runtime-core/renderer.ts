@@ -42,6 +42,7 @@ function mountElement (vnode: any, container: any) {
     // children.forEach(v => {
     //   patch(v, el)
     // })
+
     mountChildren(vnode, el)
   }
   for (const key in props) {
