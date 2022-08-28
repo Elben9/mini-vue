@@ -10,7 +10,7 @@ const createActiveObject = (raw, baseHandlers) => {
 }
 
 export const isReactive = (obj) => {
-  return obj[ReactiveFlags.IS_REACTIVE]
+  return !!obj[ReactiveFlags.IS_REACTIVE]
 }
 
 export const isReadOnly = (obj) => {

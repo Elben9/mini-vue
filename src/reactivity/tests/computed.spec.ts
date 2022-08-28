@@ -35,6 +35,7 @@ describe('computed', () => {
 
     // should not compute until needed
     value.foo = 2
+    // 此时触发trigger，_dirty改变为true
     expect(getter).toHaveBeenCalledTimes(1)
 
     // now it should compute

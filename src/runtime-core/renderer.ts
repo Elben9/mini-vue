@@ -1,21 +1,29 @@
 import { createComponentInstance, setupComponent } from "./components"
 import { isObject } from '../util/index';
 
-export  function render (vnode, container) {
+export function render (vnode, container) {
   // patch
   patch(vnode, container)
 }
 
 function patch (vnode, container) {
-  // 处理组件
+  // ShapeFlags 标识虚拟节点有哪几种flag
+  // vnode -> flag
+  // element  componet: STATEFUL_COMPONENT  children: text_children array_children
 
-  // TODO 判断vnode是否element类型?
-  // 如何区分是element类型还是component类型
-  console.log(vnode.type, '查看element类型')
+  // 处理组件
+  // 如何区分是element类型还是component类型? vnode.type
   // element类型的type是string，component类型是对象
-  if (typeof vnode.type === 'string') {
+  // if (typeof vnode.type === 'string') {
+  //   processElement(vnode, container)
+  // } else if (isObject(vnode.type)) {
+  //   processComponent(vnode, container)
+  // }
+  // 以上内容更新为ShapeFlags判断
+  const { ShapeFlags } = vnode
+  if (ShapeFlags & ShapeFlags.ELEMENT) {
     processElement(vnode, container)
-  } else if (isObject(vnode.type)) {
+  } else if (ShapeFlags & ShapeFlags.STATEFUL_COMPONENT) {
     processComponent(vnode, container)
   }
 }
@@ -33,16 +41,21 @@ function processComponent (vnode: any, container: any) {
 // 创建element
 function mountElement (vnode: any, container: any) {
   const el = (vnode.el = document.createElement(vnode.type))
-  const { children, props } = vnode
+  const { children, props, ShapeFlags } = vnode
   // children: string array
-  if (typeof children === 'string') {
+  // if (typeof children === 'string') {
+  //   el.textContent = children
+  // } else if (Array.isArray(children)) {
+  //   // vnode 遍历children 拿到每一个vnode，然后执行patch
+  //   // children.forEach(v => {
+  //   //   patch(v, el)
+  //   // })
+  //   mountChildren(vnode, el)
+  // }
+  // 以上改为ShapeFlags判断
+  if (ShapeFlags & ShapeFlags.TEXT_CHILDREN) {
     el.textContent = children
-  } else if (Array.isArray(children)) {
-    // vnode 遍历children 拿到每一个vnode，然后执行patch
-    // children.forEach(v => {
-    //   patch(v, el)
-    // })
-
+  } else if (ShapeFlags & ShapeFlags.ARRAY_CHILDREN) {
     mountChildren(vnode, el)
   }
   for (const key in props) {

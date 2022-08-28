@@ -16,7 +16,7 @@ const createGetter = (isReadonly = false, shallow = false) => (target, key) => {
     return res
   }
 
-  // 查看res是否还是obj 
+  // 解决嵌套对象深层reactive和readonly
   if (isObject(res)) {
     return isReadonly ? readonly(res) : reactive(res)
   }

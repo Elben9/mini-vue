@@ -15,7 +15,7 @@ export class ReactiveEffect {
     this.scheduler = scheduler
   }
   run () {
-    // 如果stop（）过，直接return  防止重新收集依赖
+    // 如果stop（）过，直接return 防止重新收集依赖
     if (!this.active) {
       return this._fn()
     }
@@ -40,6 +40,7 @@ function cleanupEffect (effect) {
   effect.deps.forEach((dep: any) => {
     dep.delete(effect)
   })
+  effect.deps.length = 0
 }
 
 export function effect (fn, options:any = {}) {
@@ -79,6 +80,7 @@ export function track (target, key) {
   // activeEffect.deps.push(dep)
 }
 
+// 逻辑抽离 方便ref复用该逻辑
 export function trackEffect (dep) {
   if (dep.has(activeEffect)) return
   // dep存储了某个key下所有的effect传入的方法 (如foo 可能执行了多个effect， dep中就存储了很多个关于foo的effect）
@@ -103,6 +105,7 @@ export function trigger (target, key) {
 
 export function triggerEffect (dep) {
   for (const effect of dep) {
+    // 调度器 scheduler 
     if (effect.scheduler) {
       effect.scheduler()
     } else {

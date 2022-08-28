@@ -8,7 +8,7 @@ class RefImpl {
   private _rawValue
   public __v_isRef = true
   constructor (value) {
-    // 保存原始值 在设置值时
+    // 保存原始值 在设置值时方便对比  
     this._rawValue = value
     this._value = convert(value)
     this.dep = new Set()
@@ -20,6 +20,7 @@ class RefImpl {
   set value (newValue) {
     // 如果设置新值则触发依赖
     if (hasChanged(newValue, this._rawValue)) {
+      // 设置新值时，原始值和value都要进行改变 
       this._rawValue = newValue 
       this._value = convert(newValue)
       triggerEffect(this.dep) 
@@ -33,7 +34,7 @@ function trackRefValue (ref) {
   }
 }
 
-// 转换
+// 转换 如果是对象 则reactive   
 function convert (value) {
   return isObject(value) ? reactive(value) : value
 }
@@ -52,6 +53,7 @@ export const unRef = (ref) => {
   return isRef(ref) ? ref.value : ref
 }
 
+// 类似 template中使用，省略.value
 export const proxyRefs = (objectWithRefs) => {
   return new Proxy(objectWithRefs, {
     get (target, key) {
@@ -59,6 +61,7 @@ export const proxyRefs = (objectWithRefs) => {
       return unRef(Reflect.get(target, key))
     },
     set (target, key, value) {
+      // 如果赋值的对象不是ref并且赋值前的对象是一个ref
       if (isRef(target[key]) && !isRef(value)) {
         return target[key].value = value
       } else {

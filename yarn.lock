@@ -1490,9 +1490,9 @@ camelcase@^6.2.0:
   integrity sha1-JQ/TUM/VVdDSFgsdUVEOr4Mm6G4=
 
 caniuse-lite@^1.0.30001280:
-  version "1.0.30001286"
-  resolved "http://dev.alltuu.ren:4873/caniuse-lite/-/caniuse-lite-1.0.30001286.tgz#3e9debad420419618cfdf52dc9b6572b28a8fff6"
-  integrity sha512-zaEMRH6xg8ESMi2eQ3R4eZ5qw/hJiVsO/HlLwniIwErij0JDr9P+8V4dtx1l+kLq6j3yy8l8W4fst1lBnat5wQ==
+  version "1.0.30001363"
+  resolved "http://dev.alltuu.ren:4873/caniuse-lite/-/caniuse-lite-1.0.30001363.tgz"
+  integrity sha512-HpQhpzTGGPVMnCjIomjt+jvyUu8vNFo3TaDiZ/RcoTrlOq/5+tC8zHdsbgFB6MxmaY+jCpsH09aD80Bb4Ow3Sg==
 
 chalk@^2.0.0:
   version "2.4.2"

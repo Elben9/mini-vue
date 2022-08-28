@@ -8,7 +8,9 @@ describe('reactive', () => {
     expect(observed.foo).toBe(1)
     expect(isProxy(observed)).toBe(true)
     expect(isReactive(observed)).toBe(true)
+    expect(isReactive(original)).toBe(false)
     expect(isReadOnly(readonlyObj)).toBe(true)
+    expect(isReadOnly(observed)).toBe(false)
   })
   test('nested reactive', () => {
     const original = {

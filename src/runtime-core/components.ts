@@ -22,7 +22,7 @@ function setupStatefulComponent (instance: any) {
   // 获取用户给到的配置 就是传入的type 实际为App
   const Component = instance.type
 
-  // 实现组件代理对象
+  // TODO 实现组件代理对象 这里不是很理解 复习的时候！！！得再看看
   instance.proxy = new Proxy({
     _: instance
   }, PublicInstanceProxyHandlers
@@ -55,6 +55,7 @@ function setupStatefulComponent (instance: any) {
 
 function handleSetupResult (instance, setupResult: any) {
   // TODO function
+
   if (typeof setupResult === 'object') {
     instance.setupState = setupResult
   }
