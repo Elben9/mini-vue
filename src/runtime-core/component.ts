@@ -14,12 +14,13 @@ export function setupComponent (instance) {
   // initProps()
   // initSLots()
 
-  // 初始化component
+  // 初始化component （设置有状态的组件， 除了有状态的组件还有函数组件 无状态）
   setupStatefulComponent(instance)
 }
 
 function setupStatefulComponent (instance: any) {
   // 获取用户给到的配置 就是传入的type 实际为App
+  // const Component = instance.vnode.type
   const Component = instance.type
 
   // TODO 实现组件代理对象 这里不是很理解 复习的时候！！！得再看看
@@ -31,7 +32,7 @@ function setupStatefulComponent (instance: any) {
     // get (target, key) {
     //   // 从setupState获取值
     //   const { setupState } = instance
-    //   if (key in setupState) { 
+    //   if (key in setupState) {
     //     return setupState[key]
     //   }
     //   if (key === '$el') {
@@ -63,6 +64,7 @@ function handleSetupResult (instance, setupResult: any) {
 }
 
 function finishComponentSetup (instance: any) {
+  // createApp时拿到的就是APP
   const Component = instance.type
 
   // if (Component.render) {

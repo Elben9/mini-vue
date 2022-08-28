@@ -1,6 +1,11 @@
-import { createComponentInstance, setupComponent } from "./components"
+import { createComponentInstance, setupComponent } from "./component"
 import { isObject } from '../util/index';
 
+/**
+ * 
+ * @param vnode 虚拟节点
+ * @param container 容器
+ */
 export function render (vnode, container) {
   // patch
   patch(vnode, container)
@@ -35,7 +40,7 @@ function processElement (vnode: any, container: any) {
 }
 
 function processComponent (vnode: any, container: any) {
-  mounteComponent(vnode, container)
+  mountComponent(vnode, container)
 }
 
 // 创建element
@@ -70,12 +75,11 @@ function mountElement (vnode: any, container: any) {
   }
   container.append(el)
 }
-
-// 创建component  initinalVNode初始化vnode
-function mounteComponent (initinalVNode: any, container: any) {
-  const instance = createComponentInstance(initinalVNode)
+// 创建component  initialVNode初始化vnode
+function mountComponent (initialVNode: any, container: any) {
+  const instance = createComponentInstance(initialVNode)
   setupComponent(instance)
-  SetupRenderEffectFn(instance, initinalVNode, container)
+  SetupRenderEffectFn(instance, initialVNode, container)
 }
 
 function mountChildren (vnode, container) {
@@ -84,18 +88,19 @@ function mountChildren (vnode, container) {
   })
 }
 
-function SetupRenderEffectFn (instance: any, initinalVNode, container) {  
+function SetupRenderEffectFn (instance: any, initialVNode, container) {  
   const { proxy } = instance
   
   // vnode
   // const subTree = instance.render()
+  // instance.render方法时在finishComponentSetup()时挂上来的
   const subTree = instance.render.call(proxy)
 
-  // vnode -> patch
-  // vnode -> 现在上element类型 -> mountElement 挂载element
+  // 根据返回的虚拟节点 进步patch vnode -> patch
+  // vnode -> 现在是element类型 ->下一步应该 mountElement 挂载element
   // mountElement 在patch里做
   patch(subTree, container)
   
   // 此时mount完
-  initinalVNode.el = subTree.el
+  initialVNode.el = subTree.el
 }

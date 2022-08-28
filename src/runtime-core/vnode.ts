@@ -1,4 +1,7 @@
 import { ShapeFlags } from '../util/ShapeFlags'
+/**
+ * @params type: 元素 组件
+ */
 export function createVNode (type, props?, children?) {
   const vnode = {
     type,
