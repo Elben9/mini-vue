@@ -1,12 +1,17 @@
 import { mutableHandlers, readonlyHandlers, shallowReadonlyHandlers } from './baseHandlers'
+import { isObject } from '../util/index';
 
 export const enum ReactiveFlags {
   IS_REACTIVE = '__v_isReactive',
   IS_READONLY = '__v_isReadonly'
 }
 
-const createActiveObject = (raw, baseHandlers) => {
-  return new Proxy(raw, baseHandlers)
+const createActiveObject = (target, baseHandlers) => {
+  if (!isObject(target)) {
+    console.warn(`target ${target} must be object`)
+    return target
+  }
+  return new Proxy(target, baseHandlers)
 }
 
 export const isReactive = (obj) => {
