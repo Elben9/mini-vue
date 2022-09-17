@@ -13,10 +13,12 @@ class RefImpl {
     this._value = convert(value)
     this.dep = new Set()
   }
+
   get value () {
     trackRefValue(this)
     return this._value
   }
+
   set value (newValue) {
     // 如果设置新值则触发依赖
     if (hasChanged(newValue, this._rawValue)) {

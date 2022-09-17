@@ -5,14 +5,15 @@ import { ShapeFlags } from '../util/ShapeFlags'
 export function createVNode (type, props?, children?) {
   const vnode = {
     type,
-    props,
+    props, 
     children,
     shapeFlags: getShapeFlags(type),
     el: null
   }
   
-  // children
+  // children 
   if (typeof children === 'string') {
+    // 通过｜ 或运算符进行改变
     // vnode.shapeFlags = vnode.shapeFlags | ShapeFlags.TEXT_CHILDREN
     vnode.shapeFlags |= ShapeFlags.TEXT_CHILDREN
   } else if (Array.isArray(children)) {

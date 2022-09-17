@@ -1,5 +1,5 @@
 import { createComponentInstance, setupComponent } from "./component"
-import { isObject } from '../util/index';
+import { ShapeFlags } from "../util/ShapeFlags";
 
 /**
  * 
@@ -12,7 +12,7 @@ export function render (vnode, container) {
 }
 
 function patch (vnode, container) {
-  // ShapeFlags 标识虚拟节点有哪几种flag
+  // shapeFlags 标识虚拟节点有哪几种flag
   // vnode -> flag
   // element  componet: STATEFUL_COMPONENT  children: text_children array_children
 
@@ -25,10 +25,10 @@ function patch (vnode, container) {
   //   processComponent(vnode, container)
   // }
   // 以上内容更新为ShapeFlags判断
-  const { ShapeFlags } = vnode
-  if (ShapeFlags & ShapeFlags.ELEMENT) {
+  const { shapeFlags } = vnode
+  if (shapeFlags & ShapeFlags.ELEMENT) {
     processElement(vnode, container)
-  } else if (ShapeFlags & ShapeFlags.STATEFUL_COMPONENT) {
+  } else if (shapeFlags & ShapeFlags.STATEFUL_COMPONENT) {
     processComponent(vnode, container)
   }
 }
@@ -46,7 +46,7 @@ function processComponent (vnode: any, container: any) {
 // 创建element
 function mountElement (vnode: any, container: any) {
   const el = (vnode.el = document.createElement(vnode.type))
-  const { children, props, ShapeFlags } = vnode
+  const { children, props, shapeFlags } = vnode
   // children: string array
   // if (typeof children === 'string') {
   //   el.textContent = children
@@ -58,11 +58,12 @@ function mountElement (vnode: any, container: any) {
   //   mountChildren(vnode, el)
   // }
   // 以上改为ShapeFlags判断
-  if (ShapeFlags & ShapeFlags.TEXT_CHILDREN) {
+  if (shapeFlags & ShapeFlags.TEXT_CHILDREN) {
     el.textContent = children
-  } else if (ShapeFlags & ShapeFlags.ARRAY_CHILDREN) {
+  } else if (shapeFlags & ShapeFlags.ARRAY_CHILDREN) {
     mountChildren(vnode, el)
   }
+
   for (const key in props) {
     if (Array.isArray(props[key])) {
       const value = props[key].reduce((prev, curr) => {
@@ -70,6 +71,12 @@ function mountElement (vnode: any, container: any) {
       })
       el.setAttribute(key, value)
     } else {
+      // const isOn = (key: string): boolean => key.startsWith('on')
+      const isOn = (key: string): boolean => /^on[A-z]/.test(key)
+      if (isOn(key)) {
+        const event = key.slice(2).toLowerCase()
+        el.addEventListener(event, props[key])
+      }
       el.setAttribute(key, props[key])
     }
   }
